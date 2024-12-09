@@ -2,7 +2,7 @@ use color_eyre::Result;
 use nix::sys::utsname::UtsName;
 use std::{
     fs::File,
-    io::{self, Read},
+    io::{self, BufRead, BufReader},
 };
 
 pub fn get_system_info(utsname: &UtsName) -> nix::Result<String> {
@@ -15,13 +15,15 @@ pub fn get_system_info(utsname: &UtsName) -> nix::Result<String> {
 }
 
 pub fn get_os_pretty_name() -> Result<String, io::Error> {
-    let mut os_release_content = String::with_capacity(1024);
-    File::open("/etc/os-release")?.read_to_string(&mut os_release_content)?;
+    let file = File::open("/etc/os-release")?;
+    let reader = BufReader::new(file);
 
-    let pretty_name = os_release_content
-        .lines()
-        .find(|line| line.starts_with("PRETTY_NAME="))
-        .map(|line| line.trim_start_matches("PRETTY_NAME=").trim_matches('"'));
+    for line in reader.lines() {
+        let line = line?;
+        if let Some(pretty_name) = line.strip_prefix("PRETTY_NAME=") {
+            return Ok(pretty_name.trim_matches('"').to_string());
+        }
+    }
 
-    Ok(pretty_name.unwrap_or("Unknown").to_string())
+    Ok("Unknown".to_string())
 }
