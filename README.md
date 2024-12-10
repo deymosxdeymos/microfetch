@@ -47,15 +47,17 @@ Fastfetch, as its name indicates, a very fast fetch tool written in C, however,
 I am not interested in any of its additional features and I very much dislike
 the defaults. Microfetch is a fetch tool that you would normally write in Bash
 and put in your `~/.bashrc` but actually _really_ fast because it opts-out of
-all customization options provided by Fastfetch. Why? Because I can.
+all customization options provided by Fastfetch. Why? Because I can, and because
+I prefer Rust for "structured" Bash scripts.
 
 I cannot re-iterate it enough, Microfetch is annoyingly fast.
 
 ## Benchmarks
 
-Microfetch's performance is mostly hardware-dependant, however, the overall
-trend seems to be < 2ms on any modern (2015 and after) CPU. Below are the
-benchmarks with Hyperfine on my desktop system.
+Microfetch's performance is capped by hardware-specific race conditions, meaning
+it may (at times) depend on your hardware. However, the overall trend seems to
+be < 2ms on any modern (2015 and after) CPU. Below are the benchmarks with
+Hyperfine on my desktop system.
 
 | Command      |   Mean [ms] | Min [ms] | Max [ms] |       Relative | Written by raf? |
 | :----------- | ----------: | -------: | -------: | -------------: | --------------: |
@@ -65,7 +67,7 @@ benchmarks with Hyperfine on my desktop system.
 | `neofetch`   | 735.4 ± 9.5 |    721.1 |    752.8 | 555.48 ± 19.08 |              no |
 
 _As far as I'm concerned, Microfetch is faster than almost every fetch tool
-there is. The only downside of using Rust is introducing more "bloated"
+there is. The only downsides of using Rust are introducing more "bloated"
 dependency trees and increasing build times. The latter is easily mitigated with
 Nix's binary cache, though._
 
@@ -77,6 +79,10 @@ To benchmark individual functions, [Criterion.rs] is used. See Criterion's
 features of Microfetch.
 
 ## Installation
+
+> [!NOTE]
+> You will need a Nerdfonts patched font installed, and for your terminal
+> emulator to support said font. Microfetch uses nerdfonts glyphs by default.
 
 Microfetch is packaged in [nixpkgs](https://github.com/nixos/nixpkgs). You can
 get it through the unstable channel for the time being. The Nix flake can also
