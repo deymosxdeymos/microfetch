@@ -21,7 +21,13 @@ pub fn get_os_pretty_name() -> Result<String, io::Error> {
     for line in reader.lines() {
         let line = line?;
         if let Some(pretty_name) = line.strip_prefix("PRETTY_NAME=") {
-            return Ok(pretty_name.trim_matches('"').to_string());
+            if let Some(trimmed) = pretty_name
+                .strip_prefix('"')
+                .and_then(|s| s.strip_suffix('"'))
+            {
+                return Ok(trimmed.to_string());
+            }
+            return Ok(pretty_name.to_string());
         }
     }
 
