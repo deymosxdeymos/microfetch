@@ -4,15 +4,13 @@ mod release;
 mod system;
 mod uptime;
 
-use std::io::Write;
-
-use crate::colors::{print_dots, BLUE, CYAN, RESET};
+use crate::colors::print_dots;
 use crate::desktop::get_desktop_info;
 use crate::release::{get_os_pretty_name, get_system_info};
 use crate::system::{get_memory_usage, get_root_disk_usage, get_shell, get_username_and_hostname};
 use crate::uptime::get_current;
-
 use color_eyre::Report;
+use std::io::Write;
 
 fn main() -> Result<(), Report> {
     color_eyre::install()?;
@@ -56,6 +54,8 @@ struct Fields {
 }
 
 fn print_system_info(fields: &Fields) {
+    use crate::colors::COLORS;
+
     let Fields {
         user_info,
         os_name,
@@ -68,16 +68,22 @@ fn print_system_info(fields: &Fields) {
         colors,
     } = fields;
 
-    let _ = std::io::stdout().write_all(format!(
-        "
- {CYAN}     ▟█▖    {BLUE}▝█▙ ▗█▛          {user_info} ~{RESET}
- {CYAN}  ▗▄▄▟██▄▄▄▄▄{BLUE}▝█▙█▛  {CYAN}▖        {CYAN}  {BLUE}System{RESET}        {os_name}
- {CYAN}  ▀▀▀▀▀▀▀▀▀▀▀▘{BLUE}▝██  {CYAN}▟█▖       {CYAN}  {BLUE}Kernel{RESET}        {kernel_version}
- {BLUE}     ▟█▛       {BLUE}▝█▘{CYAN}▟█▛        {CYAN}  {BLUE}Shell{RESET}         {shell}
- {BLUE}▟█████▛          {CYAN}▟█████▛     {CYAN}  {BLUE}Uptime{RESET}        {uptime}
- {BLUE}   ▟█▛{CYAN}▗█▖       {CYAN}▟█▛          {CYAN}  {BLUE}Desktop{RESET}       {desktop}
- {BLUE}  ▝█▛  {CYAN}██▖{BLUE}▗▄▄▄▄▄▄▄▄▄▄▄       {CYAN}󰍛  {BLUE}Memory{RESET}        {memory_usage}
- {BLUE}   ▝  {CYAN}▟█▜█▖{BLUE}▀▀▀▀▀██▛▀▀▘       {CYAN}󱥎  {BLUE}Storage (/){RESET}   {storage}
- {CYAN}     ▟█▘ ▜█▖    {BLUE}▝█▛          {CYAN}  {BLUE}Colors{RESET}        {colors}
-").as_bytes());
+    let cyan = COLORS.cyan;
+    let blue = COLORS.blue;
+    let reset = COLORS.reset;
+    let system_info = format!("
+    {cyan}     ▟█▖    {blue}▝█▙ ▗█▛          {user_info} ~{reset}
+    {cyan}  ▗▄▄▟██▄▄▄▄▄{blue}▝█▙█▛  {cyan}▖        {cyan}  {blue}System{reset}        {os_name}
+    {cyan}  ▀▀▀▀▀▀▀▀▀▀▀▘{blue}▝██  {cyan}▟█▖       {cyan}  {blue}Kernel{reset}        {kernel_version}
+    {blue}     ▟█▛       {blue}▝█▘{cyan}▟█▛        {cyan}  {blue}Shell{reset}         {shell}
+    {blue}▟█████▛          {cyan}▟█████▛     {cyan}  {blue}Uptime{reset}        {uptime}
+    {blue}   ▟█▛{cyan}▗█▖       {cyan}▟█▛          {cyan}  {blue}Desktop{reset}       {desktop}
+    {blue}  ▝█▛  {cyan}██▖{blue}▗▄▄▄▄▄▄▄▄▄▄▄       {cyan}󰍛  {blue}Memory{reset}        {memory_usage}
+    {blue}   ▝  {cyan}▟█▜█▖{blue}▀▀▀▀▀██▛▀▀▘       {cyan}󱥎  {blue}Storage (/){reset}   {storage}
+    {cyan}     ▟█▘ ▜█▖    {blue}▝█▛          {cyan}  {blue}Colors{reset}        {colors}");
+
+    std::io::stdout()
+        .lock()
+        .write_all(system_info.as_bytes())
+        .expect("Failed to write to stdout");
 }
