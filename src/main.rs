@@ -84,6 +84,6 @@ fn print_system_info(fields: &Fields) {
 
     std::io::stdout()
         .lock()
-        .write_all(system_info.as_bytes())
+        .write_all(format!("{}\n", system_info).as_bytes())
         .expect("Failed to write to stdout");
 }
