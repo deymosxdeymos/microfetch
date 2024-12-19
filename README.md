@@ -34,23 +34,25 @@ than welcome to use it on your system: it's pretty [fast...](#benchmarks)
     - Name
     - Version
     - Architecture
-  - Current shell (from $SHELL, trimmed if store path)
+  - Current shell (from `$SHELL`, trimmed if store path)
   - Current Desktop (DE/WM/Compositor and display backend)
   - Memory Usage/Total Memory
   - Storage Usage/Total Storage (for `/` only)
   - Shell Colors
 - Did I mention fast?
+- Respects [`NO_COLOR` spec](https://no-color.org/)
 
 ## Motivation
 
 Fastfetch, as its name indicates, a very fast fetch tool written in C, however,
-I am not interested in any of its additional features and I very much dislike
-the defaults. Microfetch is a fetch tool that you would normally write in Bash
-and put in your `~/.bashrc` but actually _really_ fast because it opts-out of
-all customization options provided by Fastfetch. Why? Because I can, and because
-I prefer Rust for "structured" Bash scripts.
+I am not interested in any of its additional features, such as customization,
+and I very much dislike the defaults. Microfetch is my response to this problem,
+a _very fast_ fetch tool that you would normally write in Bash and put in your
+`~/.bashrc` but actually _really_ fast because it opts-out of all customization
+options provided by Fastfetch, and is written in Rust. Why? Because I can, and
+because I prefer Rust for "structured" Bash scripts.
 
-I cannot re-iterate it enough, Microfetch is annoyingly fast.
+I cannot re-iterate it enough, Microfetch is _annoyingly fast_.
 
 ## Benchmarks
 
