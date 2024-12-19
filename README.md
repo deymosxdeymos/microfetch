@@ -11,7 +11,7 @@ of maintainability. Runs in a _fraction of a millisecond_ and displays _most_ of
 the nonsense you'd see posted on r/unixporn or other internet communities. Aims
 to replace [fastfetch](https://github.com/fastfetch-cli/fastfetch) on my
 personal system, but [probably not yours](#customizing). Though, you are more
-than welcome to use it on your system: it's pretty [fast...](#benchmarks)
+than welcome to use it on your system: it's pretty [fast](#benchmarks)...
 
 <p align="center">
   <img
@@ -56,22 +56,29 @@ I cannot re-iterate it enough, Microfetch is _annoyingly fast_.
 
 ## Benchmarks
 
-Microfetch's performance is capped by hardware-specific race conditions, meaning
-it may (at times) depend on your hardware. However, the overall trend seems to
-be < 2ms on any modern (2015 and after) CPU. Below are the benchmarks with
-Hyperfine on my desktop system.
+The performance may be sometimes influenced by hardware-specific race
+conditions, or even your kernel configuration meaning it may (at times) depend
+on your hardware. However, the overall trend appears to be less than 1.3ms on
+any modern (2015 and after) CPU that I own. Below are the benchmarks with
+Hyperfine on my desktop system. Please note that those benchmarks will not be
+always kept up to date, but I will try to update the numbers as I make
+Microfetch faster.
 
-| Command      |   Mean [ms] | Min [ms] | Max [ms] |       Relative | Written by raf? |
-| :----------- | ----------: | -------: | -------: | -------------: | --------------: |
-| `microfetch` |   1.3 ± 0.0 |      1.3 |      1.4 |           1.00 |             yes |
-| `fastfetch`  |  31.9 ± 0.8 |     30.8 |     33.8 |   24.08 ± 0.98 |              no |
-| `pfetch`     | 254.2 ± 4.8 |    246.7 |    264.9 |  191.97 ± 7.10 |              no |
-| `neofetch`   | 735.4 ± 9.5 |    721.1 |    752.8 | 555.48 ± 19.08 |              no |
+| Command      |    Mean [ms] | Min [ms] | Max [ms] |       Relative | Written by raf? |
+| :----------- | -----------: | -------: | -------: | -------------: | --------------: |
+| `microfetch` |    1.0 ± 0.1 |      0.9 |      1.7 |           1.00 |             yes |
+| `fastfetch`  |   48.6 ± 1.6 |     45.8 |     61.3 |   46.65 ± 4.75 |              no |
+| `pfetch`     |  206.0 ± 4.5 |    198.0 |    241.4 | 197.50 ± 19.53 |              no |
+| `neofetch`   | 689.1 ± 29.1 |    637.7 |    811.2 | 660.79 ± 69.56 |              no |
 
-_As far as I'm concerned, Microfetch is faster than almost every fetch tool
-there is. The only downsides of using Rust are introducing more "bloated"
-dependency trees and increasing build times. The latter is easily mitigated with
-Nix's binary cache, though._
+As far as I'm concerned, Microfetch is significantly faster than every other
+fetch tool that I have tried. The only downsides of using Rust for the project
+(in exchange for speed and maintainability) is the slightly "bloated" dependency
+trees, and the increased build times. The latter is very easily mitigated with
+Nix's binary cache. Since Microfetch is already in Nixpkgs, you are recommended
+to use it to utilize the binary cache properly
+
+### Benchmarking Individual Functions
 
 [Criterion.rs]: https://github.com/bheisler/criterion.rs
 [Getting Started Guide]: https://bheisler.github.io/criterion.rs/book/getting_started.html
@@ -86,9 +93,19 @@ features of Microfetch.
 > You will need a Nerdfonts patched font installed, and for your terminal
 > emulator to support said font. Microfetch uses nerdfonts glyphs by default.
 
-Microfetch is packaged in [nixpkgs](https://github.com/nixos/nixpkgs). You can
-get it through the unstable channel for the time being. The Nix flake can also
-be used for bleeding-edge builds.
+Microfetch is packaged in [nixpkgs](https://github.com/nixos/nixpkgs). It can be
+installed by adding `pkgs.microfetch` to your `environment.systemPackages`.
+Additionally, you can try out Microfetch in a Nix shell.
+
+```bash
+nix shell nixpkgs#microfetch
+```
+
+Or run it directly with `nix run`
+
+```bash
+nix run nixpkgs#microfetch
+```
 
 Non-Nix users will have to build Microfetch with `cargo`. It is not published
 anywhere but I imagine you can use `cargo install --git` to install it from
