@@ -9,12 +9,9 @@ use crate::desktop::get_desktop_info;
 use crate::release::{get_os_pretty_name, get_system_info};
 use crate::system::{get_memory_usage, get_root_disk_usage, get_shell, get_username_and_hostname};
 use crate::uptime::get_current;
-use color_eyre::Report;
 use std::io::Write;
 
-fn main() -> Result<(), Report> {
-    color_eyre::install()?;
-
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = std::env::args().collect();
     if args.len() > 1 && args[1] == "--version" {
         println!("Microfetch {}", env!("CARGO_PKG_VERSION"));

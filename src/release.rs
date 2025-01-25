@@ -1,4 +1,3 @@
-use color_eyre::Result;
 use nix::sys::utsname::UtsName;
 use std::{
     fs::File,
@@ -30,6 +29,5 @@ pub fn get_os_pretty_name() -> Result<String, io::Error> {
             return Ok(pretty_name.to_string());
         }
     }
-
     Ok("Unknown".to_string())
 }
