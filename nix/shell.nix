@@ -5,7 +5,6 @@
   clippy,
   cargo,
   rustc,
-  gcc,
   rustPlatform,
   gnuplot,
 }:
@@ -15,7 +14,6 @@ mkShell {
   nativeBuildInputs = [
     cargo
     rustc
-    gcc
 
     rust-analyzer-unwrapped
     rustfmt

@@ -19,6 +19,7 @@ in
     };
 
     cargoLock.lockFile = ../Cargo.lock;
+    enableParallelBuilding = true;
 
     meta = {
       description = "A microscopic fetch script in Rust, for NixOS systems";
