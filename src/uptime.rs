@@ -1,32 +1,39 @@
-use nix::sys::sysinfo::sysinfo;
 use std::io;
 
 pub fn get_current() -> Result<String, io::Error> {
-    let info = sysinfo().map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
-    let uptime_seconds = info.uptime().as_secs();
+    let uptime_seconds = unsafe {
+        let mut info: libc::sysinfo = std::mem::zeroed();
+        if libc::sysinfo(&mut info) != 0 {
+            return Err(io::Error::last_os_error());
+        }
+        info.uptime as u64
+    };
 
-    let days = uptime_seconds / (60 * 60 * 24);
+    let days = uptime_seconds / 86400;
     let hours = (uptime_seconds / 3600) % 24;
     let minutes = (uptime_seconds / 60) % 60;
 
     let mut result = String::new();
     if days > 0 {
-        result.push_str(&format!("{days} day{}", if days > 1 { "s" } else { "" }));
+        result.push_str(&days.to_string());
+        result.push_str(if days == 1 { " day" } else { " days" });
     }
     if hours > 0 {
         if !result.is_empty() {
             result.push_str(", ");
         }
-        result.push_str(&format!("{hours} hour{}", if hours > 1 { "s" } else { "" }));
+        result.push_str(&hours.to_string());
+        result.push_str(if hours == 1 { " hour" } else { " hours" });
     }
     if minutes > 0 {
         if !result.is_empty() {
             result.push_str(", ");
         }
-        result.push_str(&format!(
-            "{minutes} minute{}",
-            if minutes > 1 { "s" } else { "" }
-        ));
+        result.push_str(&minutes.to_string());
+        result.push_str(if minutes == 1 { " minute" } else { " minutes" });
+    }
+    if result.is_empty() {
+        result.push_str("less than a minute");
     }
 
     Ok(result)
