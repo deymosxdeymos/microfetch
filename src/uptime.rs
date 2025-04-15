@@ -13,7 +13,7 @@ pub fn get_current() -> Result<String, io::Error> {
     let hours = (uptime_seconds / 3600) % 24;
     let minutes = (uptime_seconds / 60) % 60;
 
-    let mut result = String::new();
+    let mut result = String::with_capacity(32);
     if days > 0 {
         result.push_str(&days.to_string());
         result.push_str(if days == 1 { " day" } else { " days" });
