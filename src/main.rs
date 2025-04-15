@@ -12,8 +12,7 @@ use crate::uptime::get_current;
 use std::io::{Write, stdout};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let args: Vec<String> = std::env::args().collect();
-    if args.len() > 1 && args[1] == "--version" {
+    if Some("--version") == std::env::args().nth(1).as_deref() {
         println!("Microfetch {}", env!("CARGO_PKG_VERSION"));
     } else {
         let utsname = nix::sys::utsname::uname()?;
