@@ -27,7 +27,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             storage: get_root_disk_usage()?,
             colors: print_dots(),
         };
-        print_system_info(&fields);
+        print_system_info(&fields)?;
     }
 
     Ok(())
@@ -49,7 +49,7 @@ struct Fields {
     colors: String,
 }
 
-fn print_system_info(fields: &Fields) {
+fn print_system_info(fields: &Fields) -> Result<(), Box<dyn std::error::Error>> {
     use crate::colors::COLORS;
 
     let Fields {
@@ -78,7 +78,5 @@ fn print_system_info(fields: &Fields) {
     {blue}   ▝  {cyan}▟█▜█▖{blue}▀▀▀▀▀██▛▀▀▘       {cyan}󱥎  {blue}Storage (/){reset}   {storage}
     {cyan}     ▟█▘ ▜█▖    {blue}▝█▛          {cyan}  {blue}Colors{reset}        {colors}\n");
 
-    stdout()
-        .write_all(system_info.as_bytes())
-        .expect("Failed to write to stdout");
+    Ok(stdout().write_all(system_info.as_bytes())?)
 }
