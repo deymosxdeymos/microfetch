@@ -1,12 +1,12 @@
-use std::io;
+use std::{io, mem::MaybeUninit};
 
 pub fn get_current() -> Result<String, io::Error> {
-    let uptime_seconds = unsafe {
-        let mut info: libc::sysinfo = std::mem::zeroed();
-        if libc::sysinfo(&mut info) != 0 {
+    let uptime_seconds = {
+        let mut info = MaybeUninit::uninit();
+        if unsafe { libc::sysinfo(info.as_mut_ptr()) } != 0 {
             return Err(io::Error::last_os_error());
         }
-        info.uptime as u64
+        unsafe { info.assume_init().uptime as u64 }
     };
 
     let days = uptime_seconds / 86400;
