@@ -4,13 +4,13 @@ use std::{
     io::{self, BufRead, BufReader},
 };
 
-pub fn get_system_info(utsname: &UtsName) -> nix::Result<String> {
-    Ok(format!(
+pub fn get_system_info(utsname: &UtsName) -> String {
+    format!(
         "{} {} ({})",
         utsname.sysname().to_str().unwrap_or("Unknown"),
         utsname.release().to_str().unwrap_or("Unknown"),
         utsname.machine().to_str().unwrap_or("Unknown")
-    ))
+    )
 }
 
 pub fn get_os_pretty_name() -> Result<String, io::Error> {

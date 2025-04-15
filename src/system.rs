@@ -49,7 +49,6 @@ pub fn get_root_disk_usage() -> Result<String, io::Error> {
 }
 
 pub fn get_memory_usage() -> Result<String, io::Error> {
-    #[inline(always)]
     fn parse_memory_info() -> Result<(f64, f64), io::Error> {
         let mut total_memory_kb = 0.0;
         let mut available_memory_kb = 0.0;

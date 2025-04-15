@@ -9,7 +9,7 @@ use crate::desktop::get_desktop_info;
 use crate::release::{get_os_pretty_name, get_system_info};
 use crate::system::{get_memory_usage, get_root_disk_usage, get_shell, get_username_and_hostname};
 use crate::uptime::get_current;
-use std::io::Write;
+use std::io::{Write, stdout};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = std::env::args().collect();
@@ -20,7 +20,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let fields = Fields {
             user_info: get_username_and_hostname(&utsname),
             os_name: get_os_pretty_name()?,
-            kernel_version: get_system_info(&utsname)?,
+            kernel_version: get_system_info(&utsname),
             shell: get_shell(),
             desktop: get_desktop_info(),
             uptime: get_current()?,
@@ -77,10 +77,9 @@ fn print_system_info(fields: &Fields) {
     {blue}   ▟█▛{cyan}▗█▖       {cyan}▟█▛          {cyan}  {blue}Desktop{reset}       {desktop}
     {blue}  ▝█▛  {cyan}██▖{blue}▗▄▄▄▄▄▄▄▄▄▄▄       {cyan}  {blue}Memory{reset}        {memory_usage}
     {blue}   ▝  {cyan}▟█▜█▖{blue}▀▀▀▀▀██▛▀▀▘       {cyan}󱥎  {blue}Storage (/){reset}   {storage}
-    {cyan}     ▟█▘ ▜█▖    {blue}▝█▛          {cyan}  {blue}Colors{reset}        {colors}");
+    {cyan}     ▟█▘ ▜█▖    {blue}▝█▛          {cyan}  {blue}Colors{reset}        {colors}\n");
 
-    std::io::stdout()
-        .lock()
-        .write_all(format!("{}\n", system_info).as_bytes())
+    stdout()
+        .write_all(system_info.as_bytes())
         .expect("Failed to write to stdout");
 }

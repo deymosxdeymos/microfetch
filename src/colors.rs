@@ -12,8 +12,8 @@ pub struct Colors {
 
 impl Colors {
     const fn new(is_no_color: bool) -> Self {
-        match is_no_color {
-            true => Self {
+        if is_no_color {
+            Self {
                 reset: "",
                 blue: "",
                 cyan: "",
@@ -21,8 +21,9 @@ impl Colors {
                 yellow: "",
                 red: "",
                 magenta: "",
-            },
-            false => Self {
+            }
+        } else {
+            Self {
                 reset: "\x1b[0m",
                 blue: "\x1b[34m",
                 cyan: "\x1b[36m",
@@ -30,7 +31,7 @@ impl Colors {
                 yellow: "\x1b[33m",
                 red: "\x1b[31m",
                 magenta: "\x1b[35m",
-            },
+            }
         }
     }
 }
