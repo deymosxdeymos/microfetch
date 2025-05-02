@@ -9,18 +9,17 @@ use crate::desktop::get_desktop_info;
 use crate::release::{get_os_pretty_name, get_system_info};
 use crate::system::{get_memory_usage, get_root_disk_usage, get_shell, get_username_and_hostname};
 use crate::uptime::get_current;
-use std::io::Write;
+use std::io::{Write, stdout};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let args: Vec<String> = std::env::args().collect();
-    if args.len() > 1 && args[1] == "--version" {
+    if Some("--version") == std::env::args().nth(1).as_deref() {
         println!("Microfetch {}", env!("CARGO_PKG_VERSION"));
     } else {
         let utsname = nix::sys::utsname::uname()?;
         let fields = Fields {
             user_info: get_username_and_hostname(&utsname),
             os_name: get_os_pretty_name()?,
-            kernel_version: get_system_info(&utsname)?,
+            kernel_version: get_system_info(&utsname),
             shell: get_shell(),
             desktop: get_desktop_info(),
             uptime: get_current()?,
@@ -28,7 +27,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             storage: get_root_disk_usage()?,
             colors: print_dots(),
         };
-        print_system_info(&fields);
+        print_system_info(&fields)?;
     }
 
     Ok(())
@@ -50,7 +49,7 @@ struct Fields {
     colors: String,
 }
 
-fn print_system_info(fields: &Fields) {
+fn print_system_info(fields: &Fields) -> Result<(), Box<dyn std::error::Error>> {
     use crate::colors::COLORS;
 
     let Fields {
@@ -77,10 +76,7 @@ fn print_system_info(fields: &Fields) {
     {blue}   ▟█▛{cyan}▗█▖       {cyan}▟█▛          {cyan}  {blue}Desktop{reset}       {desktop}
     {blue}  ▝█▛  {cyan}██▖{blue}▗▄▄▄▄▄▄▄▄▄▄▄       {cyan}  {blue}Memory{reset}        {memory_usage}
     {blue}   ▝  {cyan}▟█▜█▖{blue}▀▀▀▀▀██▛▀▀▘       {cyan}󱥎  {blue}Storage (/){reset}   {storage}
-    {cyan}     ▟█▘ ▜█▖    {blue}▝█▛          {cyan}  {blue}Colors{reset}        {colors}");
+    {cyan}     ▟█▘ ▜█▖    {blue}▝█▛          {cyan}  {blue}Colors{reset}        {colors}\n");
 
-    std::io::stdout()
-        .lock()
-        .write_all(format!("{}\n", system_info).as_bytes())
-        .expect("Failed to write to stdout");
+    Ok(stdout().write_all(system_info.as_bytes())?)
 }

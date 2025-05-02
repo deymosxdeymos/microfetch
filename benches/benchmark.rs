@@ -1,4 +1,4 @@
-use criterion::{criterion_group, criterion_main, Criterion};
+use criterion::{Criterion, criterion_group, criterion_main};
 use microfetch_lib::colors::print_dots;
 use microfetch_lib::desktop::get_desktop_info;
 use microfetch_lib::release::{get_os_pretty_name, get_system_info};
@@ -10,7 +10,7 @@ use microfetch_lib::uptime::get_current;
 fn main_benchmark(c: &mut Criterion) {
     let utsname = nix::sys::utsname::uname().expect("lol");
     c.bench_function("user_info", |b| {
-        b.iter(|| get_username_and_hostname(&utsname))
+        b.iter(|| get_username_and_hostname(&utsname));
     });
     c.bench_function("os_name", |b| b.iter(get_os_pretty_name));
     c.bench_function("kernel_version", |b| b.iter(|| get_system_info(&utsname)));
