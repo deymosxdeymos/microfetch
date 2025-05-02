@@ -1,6 +1,6 @@
 [package]
 name = "microfetch"
-version = "0.4.7"
+version = "0.4.8"
 edition = "2024"
 
 [lib]
@@ -12,7 +12,7 @@ name = "microfetch"
 path = "src/main.rs"
 
 [dependencies]
-nix = { version = "0.29", features = ["fs", "hostname", "feature"] }
+nix = { version = "0.30", features = ["fs", "hostname", "feature"] }
 lazy_static = "1.5"
 libc = "0.2"
 
