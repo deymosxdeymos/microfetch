@@ -1,4 +1,5 @@
 use std::env;
+use std::sync::LazyLock;
 
 pub struct Colors {
     pub reset: &'static str,
@@ -36,13 +37,11 @@ impl Colors {
     }
 }
 
-lazy_static::lazy_static! {
-    pub static ref COLORS: Colors = {
-        // check for NO_COLOR once at startup
-        let is_no_color = env::var("NO_COLOR").is_ok();
-        Colors::new(is_no_color)
-    };
-}
+pub static COLORS: LazyLock<Colors> = LazyLock::new(|| {
+    // check for NO_COLOR once at startup
+    let is_no_color = env::var("NO_COLOR").is_ok();
+    Colors::new(is_no_color)
+});
 
 pub fn print_dots() -> String {
     format!(
