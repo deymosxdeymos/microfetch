@@ -16,7 +16,7 @@ nix = { version = "0.30", features = ["fs", "hostname", "feature"] }
 libc = "0.2"
 
 [dev-dependencies]
-criterion = "0.6"
+criterion = "0.7"
 
 [[bench]]
 name = "benchmark"
