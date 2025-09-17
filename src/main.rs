@@ -66,16 +66,29 @@ fn print_system_info(fields: &Fields) -> Result<(), Box<dyn std::error::Error>> 
     let cyan = COLORS.cyan;
     let blue = COLORS.blue;
     let reset = COLORS.reset;
-    let system_info = format!("
-    {cyan}     ▟█▖    {blue}▝█▙ ▗█▛          {user_info} ~{reset}
-    {cyan}  ▗▄▄▟██▄▄▄▄▄{blue}▝█▙█▛  {cyan}▖        {cyan}  {blue}System{reset}        {os_name}
-    {cyan}  ▀▀▀▀▀▀▀▀▀▀▀▘{blue}▝██  {cyan}▟█▖       {cyan}  {blue}Kernel{reset}        {kernel_version}
-    {blue}     ▟█▛       {blue}▝█▘{cyan}▟█▛        {cyan}  {blue}Shell{reset}         {shell}
-    {blue}▟█████▛          {cyan}▟█████▛     {cyan}  {blue}Uptime{reset}        {uptime}
-    {blue}   ▟█▛{cyan}▗█▖       {cyan}▟█▛          {cyan}  {blue}Desktop{reset}       {desktop}
-    {blue}  ▝█▛  {cyan}██▖{blue}▗▄▄▄▄▄▄▄▄▄▄▄       {cyan}  {blue}Memory{reset}        {memory_usage}
-    {blue}   ▝  {cyan}▟█▜█▖{blue}▀▀▀▀▀██▛▀▀▘       {cyan}󱥎  {blue}Storage (/){reset}   {storage}
-    {cyan}     ▟█▘ ▜█▖    {blue}▝█▛          {cyan}  {blue}Colors{reset}        {colors}\n");
+    let system_info = format!(
+        "
+    {blue}        ,''''' .   {user_info} ~{reset}
+    {blue}       |   ,.  |   {cyan}  {blue}System{reset}        {os_name}
+    {blue}       |  |  '_'   {cyan}  {blue}Kernel{reset}        {kernel_version}
+    {blue}  ,....|  |..      {cyan}  {blue}Shell{reset}         {shell}
+    {blue}.'  ,_;|   ..'     {cyan}  {blue}Uptime{reset}        {uptime}
+    {blue}|  |   |  |        {cyan}  {blue}Desktop{reset}       {desktop}
+    {blue}|  ',_,'  |        {cyan}  {blue}Memory{reset}        {memory_usage}
+    {blue} '.     ,'         {cyan}󱥎  {blue}Storage (/){reset}   {storage}
+    {blue}   '''''           {cyan}  {blue}Colors{reset}        {colors}"
+    );
 
+    // use this instead
+    //         ,'''''.
+    //        |   ,.  |
+    //        |  |  '_'
+    //   ,....|  |..
+    // .'  ,_;|   ..'
+    // |  |   |  |
+    // |  ',_,'  |
+    //  '.     ,'
+    //    '''''
+    //
     Ok(stdout().write_all(system_info.as_bytes())?)
 }
